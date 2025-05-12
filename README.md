@@ -14,12 +14,12 @@ LOG_FILE="/home/rade/vaultwarden_renewal.log"
 
 echo "===== $(date) =====" >> $LOG_FILE
 
-# 1. Backup vault fajlova
-echo "[INFO] Pravimo backup Vaultwarden fajlova u $BACKUP_DIR" | tee -a $LOG_FILE
+# 1. Backup celog compose_dir-a (ne samo podataka, već i konfiguracija)
+echo "[INFO] Pravimo backup celog compose_dir u $BACKUP_DIR" | tee -a $LOG_FILE
 mkdir -p "$BACKUP_DIR"
 
-# Pretpostavljamo da su podaci u folderu 'vw-data' (prilagodi ako je drugačije)
-cp -r "$COMPOSE_DIR/vw-data" "$BACKUP_DIR/" 2>> $LOG_FILE || echo "[WARN] vw-data direktorijum ne postoji" >> $LOG_FILE
+# Kopiranje celog compose_dir
+cp -r "$COMPOSE_DIR" "$BACKUP_DIR/" 2>> $LOG_FILE || echo "[WARN] Backup direktorijuma nije uspeo" >> $LOG_FILE
 
 # 2. Idemo u docker-compose direktorijum
 cd "$COMPOSE_DIR"
