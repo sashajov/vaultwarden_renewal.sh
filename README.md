@@ -28,18 +28,15 @@ cd "$COMPOSE_DIR"
 echo "[INFO] Stopiranje i uklanjanje kontejnera..." | tee -a $LOG_FILE
 docker compose down >> $LOG_FILE 2>&1
 
-# 4. Očisti zaostale kontejnere (opciono) Treba razmotriti da li je neophodno, u zavistosti da li ce docker compose down za sobom pocistiti konteinere, zavisi
-docker container prune -f >> $LOG_FILE 2>&1
-
-# 5. Povuci nove slike (Treba proveriti da li je neophodno u ovom koraku da se stavi docker-compose pull)
+# 4. Povuci nove slike (Treba proveriti da li je neophodno u ovom koraku da se stavi docker-compose pull)
 echo "[INFO] Povlačenje novih slika..." | tee -a $LOG_FILE
 docker compose pull >> $LOG_FILE 2>&1
 
-# 6. Pokreni kontejnere
+# 5. Pokreni kontejnere
 echo "[INFO] Pokretanje kontejnera..." | tee -a $LOG_FILE
 docker compose up -d >> $LOG_FILE 2>&1
 
-# 7. Restartuj nginx (ako postoji nginx servis)
+# 6. Restartuj nginx (ako postoji nginx servis)
 echo "[INFO] Restart nginx servisa" | tee -a $LOG_FILE
 docker compose restart nginx >> $LOG_FILE 2>&1 || echo "[WARN] nginx servis nije pronađen u docker-compose" >> $LOG_FILE
 
