@@ -14,11 +14,11 @@ LOG_FILE="/home/rade/vaultwarden_renewal.log"
 
 echo "===== $(date) =====" >> $LOG_FILE
 
-# 1. Backup celog compose_dir-a (ne samo podataka, već i konfiguracija)
-echo "[INFO] Pravimo backup celog compose_dir u $BACKUP_DIR" | tee -a $LOG_FILE
+# 1. Backup citavog compose_dir-a
+echo "[INFO] Pravimo backup citavog compose_dir u $BACKUP_DIR" | tee -a $LOG_FILE
 mkdir -p "$BACKUP_DIR"
 
-# Kopiranje celog compose_dir
+# Kopiranje citavog compose_dir
 cp -r "$COMPOSE_DIR" "$BACKUP_DIR/" 2>> $LOG_FILE || echo "[WARN] Backup direktorijuma nije uspeo" >> $LOG_FILE
 
 # 2. Idemo u docker-compose direktorijum
@@ -28,10 +28,10 @@ cd "$COMPOSE_DIR"
 echo "[INFO] Stopiranje i uklanjanje kontejnera..." | tee -a $LOG_FILE
 docker compose down >> $LOG_FILE 2>&1
 
-# 4. Očisti zaostale kontejnere (opciono)
+# 4. Očisti zaostale kontejnere (opciono) Treba razmotriti da li je neophodno, u zavistosti da li ce docker compose down za sobom pocistiti konteinere, zavisi
 docker container prune -f >> $LOG_FILE 2>&1
 
-# 5. Povuci nove slike
+# 5. Povuci nove slike (Treba proveriti da li je neophodno u ovom koraku da se stavi docker-compose pull)
 echo "[INFO] Povlačenje novih slika..." | tee -a $LOG_FILE
 docker compose pull >> $LOG_FILE 2>&1
 
@@ -40,16 +40,12 @@ echo "[INFO] Pokretanje kontejnera..." | tee -a $LOG_FILE
 docker compose up -d >> $LOG_FILE 2>&1
 
 # 7. Restartuj nginx (ako postoji nginx servis)
-echo "[INFO] Restart nginx servisa (ako postoji)..." | tee -a $LOG_FILE
+echo "[INFO] Restart nginx servisa" | tee -a $LOG_FILE
 docker compose restart nginx >> $LOG_FILE 2>&1 || echo "[WARN] nginx servis nije pronađen u docker-compose" >> $LOG_FILE
 
 echo "[SUCCESS] Vaultwarden obnova završena." | tee -a $LOG_FILE
 ```
 
-⏰ Cronjob primer (pokretanje svakog 1. u mesecu u 3:00)
+⏰ Cronjob primer (pokretanje na primer svakog 1. u mesecu u 3:00)
 
-Otvorite cron editor:
-crontab -e
-
-Dodaj liniju:
 0 3 1 * * /bin/bash /home/rade/scripts/vaultwarden_renewal.sh
