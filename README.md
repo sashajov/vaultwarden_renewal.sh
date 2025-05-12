@@ -1,10 +1,7 @@
 # vaultwarden_renewal.sh
 
 🛠️ Skripta: vaultwarden_renewal.sh
-# Pocetak skripte
-bash
-Copy
-Edit
+```bash
 #!/bin/bash
 set -e
 
@@ -47,22 +44,12 @@ echo "[INFO] Restart nginx servisa (ako postoji)..." | tee -a $LOG_FILE
 docker compose restart nginx >> $LOG_FILE 2>&1 || echo "[WARN] nginx servis nije pronađen u docker-compose" >> $LOG_FILE
 
 echo "[SUCCESS] Vaultwarden obnova završena." | tee -a $LOG_FILE
-# Kraj skripte
+```
 
 ⏰ Cronjob primer (pokretanje svakog 1. u mesecu u 3:00)
+
 Otvorite cron editor:
-
-bash
-Copy
-Edit
 crontab -e
+
 Dodaj liniju:
-
-bash
-Copy
-Edit
 0 3 1 * * /bin/bash /home/rade/scripts/vaultwarden_renewal.sh
-Naravno, prilagodi putanju ako čuvaš skriptu na nekom drugom mestu.
-
-🛡️ Za dodatnu sigurnost
-Možemo proširiti skriptu da napravi i snapshot Docker volume-a ako koristiš volume umesto lokalnih fajlova. Hoćeš da proverimo koji storage backend koristi tvoj vaultwarden (volume vs bind mount)?
